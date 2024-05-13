@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import restaurantController from "./controllers/restaurant.controller";
 const routerAdmin = express.Router();
 

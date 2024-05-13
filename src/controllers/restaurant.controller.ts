@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 
 import { T } from "../libs/types/common";
+import MemberService from "../models/Member.service";
 
+const memberService = new MemberService();
 const restaurantController: T = {};
 
 restaurantController.goHome = async (req: Request, res: Response) => {
