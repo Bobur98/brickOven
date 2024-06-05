@@ -30,4 +30,19 @@ restaurantController.getLogin = async (req: Request, res: Response) => {
   }
 };
 
+restaurantController.processLogin = async (req: Request, res: Response) => {
+  try {
+    res.send("You are on processLogin Page");
+  } catch (err) {
+    console.log("Error on processLogin", err);
+  }
+};
+restaurantController.processSignup = async (req: Request, res: Response) => {
+  try {
+    res.send("You are on processSignup Page");
+  } catch (err) {
+    console.log("Error on processSignup", err);
+  }
+};
+
 export default restaurantController;
