@@ -3,7 +3,7 @@ import { LoginInput, Member, MemberInput } from "../libs/types/member";
 import Errors, { Message } from "../libs/Errors";
 import { HttpCode } from "../libs/Errors";
 import { MemberType } from "../libs/enums/member.enum";
-
+import * as bcrypt from "bcryptjs";
 class MemberService {
   private readonly memberModel;
   constructor() {
@@ -21,6 +21,8 @@ class MemberService {
         Message.ONLY_ONE_RESTAURENT_ALLOWED
       );
 
+    const salt = await bcrypt.genSalt();
+    input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
     try {
       const result = await this.memberModel.create(input);
       result.memberPassword = "";
@@ -46,7 +48,12 @@ class MemberService {
       .exec();
     if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
 
-    const isMatch = input.memberPassword === member.memberPassword;
+    const isMatch = await bcrypt.compare(
+      input.memberPassword,
+      member.memberPassword
+    );
+    //const isMatch = input.memberPassword === member.memberPassword;
+
     if (!isMatch)
       throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
 
