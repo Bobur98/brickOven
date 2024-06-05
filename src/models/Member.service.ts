@@ -15,15 +15,15 @@ class MemberService {
         memberTime: MemberType.RESTAURANT,
       })
       .exec();
-    // if (exist)
-    //   throw new Errors(
-    //     HttpCode.BAD_REQUEST,
-    //     Message.ONLY_ONE_RESTAURENT_ALLOWED
-    //   );
+    if (exist)
+      throw new Errors(
+        HttpCode.BAD_REQUEST,
+        Message.ONLY_ONE_RESTAURENT_ALLOWED
+      );
 
     try {
       const result = await this.memberModel.create(input);
-      console.log(result);
+      result.memberPassword = "";
 
       return result;
     } catch (err) {
