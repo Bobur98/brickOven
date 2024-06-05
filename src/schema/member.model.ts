@@ -52,5 +52,6 @@ const memberSchema = new Schema(
   },
   { timestamps: true } // updatedAt, createdAt
 );
+memberSchema.index({ memberPhone: 1 }, { unique: true, sparse: true });
 
 export default mongoose.model("Member", memberSchema);
