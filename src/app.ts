@@ -4,11 +4,11 @@ import router from "./router";
 import routerAdmin from "./router-admin";
 import morgan from "morgan";
 import session from "express-session";
-import ConnectMongoDBSession, { MongoDBStore } from "connect-mongodb-session";
+import ConnectMongoDBSession from "connect-mongodb-session";
 
 const mongoDBStore = ConnectMongoDBSession(session);
 
-const store = new MongoDBStore({
+const store = new mongoDBStore({
   uri: String(process.env.MONGO_URL),
   collection: "sessions",
 });
