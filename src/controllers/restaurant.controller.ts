@@ -4,6 +4,7 @@ import { T } from "../libs/types/common";
 import MemberService from "../models/Member.service";
 import { AdminRequest, LoginInput, MemberInput } from "../libs/types/member";
 import { MemberType } from "../libs/enums/member.enum";
+import { Message } from "../libs/Errors";
 
 const memberService = new MemberService();
 const restaurantController: T = {};
@@ -65,7 +66,24 @@ restaurantController.processLogin = async (
     req.session.save(function () {
       res.send(result);
     });
-    res.send(result);
+  } catch (err) {
+    console.log("Error on processLogin", err);
+    res.send(err);
+  }
+};
+
+restaurantController.checkAuthSession = async (
+  req: AdminRequest,
+  res: Response
+) => {
+  try {
+    if (req.session?.member) {
+      res.send(
+        `Hi, <script> alert(" ${req.session.member.memberNick}")</script>`
+      );
+    } else {
+      res.send(`<script> alert("${Message.NOT_AUTHENTICATED}")</script>`);
+    }
   } catch (err) {
     console.log("Error on processLogin", err);
     res.send(err);
