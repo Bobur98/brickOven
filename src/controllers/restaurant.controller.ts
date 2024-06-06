@@ -32,12 +32,28 @@ restaurantController.getLogin = async (req: Request, res: Response) => {
   }
 };
 
+restaurantController.processSignup = async (req: Request, res: Response) => {
+  try {
+    const newMember: MemberInput = req.body;
+    newMember.memberType = MemberType.RESTAURANT;
+
+    const result = await memberService.processSignup(newMember);
+    // TODO SESSION AUTHENTICATION
+
+    res.send(result);
+  } catch (err) {
+    console.log("Error on processSignup", err);
+    res.send(err);
+  }
+};
+
 restaurantController.processLogin = async (req: Request, res: Response) => {
   try {
     const input: LoginInput = req.body;
     console.log(input);
 
     const result = await memberService.processLogin(input);
+    // TODO SESSION AUTHENTICATION
 
     res.send(result);
   } catch (err) {
@@ -45,17 +61,6 @@ restaurantController.processLogin = async (req: Request, res: Response) => {
     res.send(err);
   }
 };
-restaurantController.processSignup = async (req: Request, res: Response) => {
-  try {
-    const newMember: MemberInput = req.body;
-    newMember.memberType = MemberType.RESTAURANT;
 
-    const result = await memberService.processSignup(newMember);
-    res.send(result);
-  } catch (err) {
-    console.log("Error on processSignup", err);
-    res.send(err);
-  }
-};
 
 export default restaurantController;
