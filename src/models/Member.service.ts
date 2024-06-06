@@ -55,16 +55,16 @@ class MemberService {
 
   /** SSR**/
   public async processSignup(input: MemberInput): Promise<Member> {
-    const exist = await this.memberModel
-      .findOne({
-        memberTime: MemberType.RESTAURANT,
-      })
-      .exec();
-    if (exist)
-      throw new Errors(
-        HttpCode.BAD_REQUEST,
-        Message.ONLY_ONE_RESTAURENT_ALLOWED
-      );
+    // const exist = await this.memberModel
+    //   .findOne({
+    //     memberTime: MemberType.RESTAURANT,
+    //   })
+    //   .exec();
+    // if (exist)
+    //   throw new Errors(
+    //     HttpCode.BAD_REQUEST,
+    //     Message.ONLY_ONE_RESTAURENT_ALLOWED
+    //   );
 
     const salt = await bcrypt.genSalt();
     input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
