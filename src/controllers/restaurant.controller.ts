@@ -10,7 +10,7 @@ const restaurantController: T = {};
 
 restaurantController.goHome = async (req: Request, res: Response) => {
   try {
-    res.send("You are on Home Page");
+    res.render("home");
   } catch (err) {
     console.log("Error, goHome:", err);
   }
@@ -18,7 +18,7 @@ restaurantController.goHome = async (req: Request, res: Response) => {
 
 restaurantController.getSignup = async (req: Request, res: Response) => {
   try {
-    res.send("You are on signup Page");
+    res.render("signup");
   } catch (err) {
     console.log("Error on signup", err);
   }
@@ -26,7 +26,7 @@ restaurantController.getSignup = async (req: Request, res: Response) => {
 
 restaurantController.getLogin = async (req: Request, res: Response) => {
   try {
-    res.send("You are on getLogin Page");
+    res.render("login");
   } catch (err) {
     console.log("Error on getLogin", err);
   }
