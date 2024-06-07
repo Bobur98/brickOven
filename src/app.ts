@@ -5,6 +5,7 @@ import routerAdmin from "./router-admin";
 import morgan from "morgan";
 import session from "express-session";
 import ConnectMongoDBSession from "connect-mongodb-session";
+import { T } from "./libs/types/common";
 
 const mongoDBStore = ConnectMongoDBSession(session);
 
@@ -19,6 +20,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan(`:method :url :response-time [:status] \n`));
+
 /** SESSIONS **/
 // to develop sessions first we need to install following packages: connect-mongodb-session and express-session with their types
 app.use(
@@ -32,6 +34,13 @@ app.use(
     saveUninitialized: true,
   })
 );
+
+app.use(function (req, res, next) {
+  const sessionInstance = req.session as T;
+  res.locals.member = sessionInstance.member;
+  next();
+});
+
 /** VIEWS **/
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");

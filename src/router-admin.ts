@@ -18,7 +18,19 @@ routerAdmin.get("/logout", restaurantController.logout);
 routerAdmin.get("/check-me", restaurantController.checkAuthSession);
 
 /** Product**/
-routerAdmin.get("/product/all", productController.getAllProducts);
-routerAdmin.get("/product/create", productController.createNewProduct);
-routerAdmin.get("/product/:id", productController.updateChoosenProduct);
+routerAdmin.get(
+  "/product/all",
+  restaurantController.verifyRestaurant,
+  productController.getAllProducts
+);
+routerAdmin.get(
+  "/product/create",
+  restaurantController.verifyRestaurant,
+  productController.createNewProduct
+);
+routerAdmin.get(
+  "/product/:id",
+  restaurantController.verifyRestaurant,
+  productController.updateChoosenProduct
+);
 export default routerAdmin;
