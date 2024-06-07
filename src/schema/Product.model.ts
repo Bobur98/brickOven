@@ -33,7 +33,10 @@ const productSchema = new Schema(
       type: Number,
       // required: true,
     },
-
+    productAvailable: {
+      type: Boolean,
+      default: true,
+    },
     productSize: {
       type: String,
       enum: ProductSize,

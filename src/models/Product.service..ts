@@ -1,9 +1,10 @@
-import { ProductInput } from "../libs/types/product";
+import { ProductInput, ProductUpdateInput } from "../libs/types/product";
 import ProductModel from "../schema/Product.model";
 import { Product } from "../libs/types/product";
 import Errors from "../libs/Errors";
 import { HttpCode } from "../libs/Errors";
 import { Message } from "../libs/Errors";
+import { shapeIntoMongooseObjectId } from "../libs/config";
 
 class ProductService {
   private readonly productModel;
@@ -23,6 +24,19 @@ class ProductService {
 
       throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
     }
+  }
+
+  public async updateChoosenProduct(
+    id: string,
+    input: ProductUpdateInput
+  ): Promise<Product> {
+    const productId = shapeIntoMongooseObjectId(id);
+    const result = await this.productModel
+      .findByIdAndUpdate({ _id: productId }, input, { new: true })
+      .exec();
+    if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+    return result;
   }
 }
 

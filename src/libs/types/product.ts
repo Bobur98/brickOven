@@ -35,6 +35,7 @@ export interface ProductInput {
   productName: string;
   productPrice: number;
   productLeftCount?: number;
+  productAvailable?: boolean;
   productSize?: ProductSize;
   productVolume?: number;
   productDesc?: string;
