@@ -34,12 +34,12 @@ export interface ProductInput {
   productCollection: ProductCollection;
   productName: string;
   productPrice: number;
-  productLeftCount: number;
+  productLeftCount?: number;
   productSize?: ProductSize;
   productVolume?: number;
   productDesc?: string;
-  productImages: string[];
-  productViews: number;
+  productImages?: string[];
+  productViews?: number;
 }
 
 export interface ProductUpdateInput {

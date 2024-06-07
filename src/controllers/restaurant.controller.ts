@@ -45,7 +45,7 @@ restaurantController.processSignup = async (
       throw new Errors(HttpCode.BAD_REQUEST, Message.IMAGE_REQUIRED);
     }
     const newMember: MemberInput = req.body;
-    newMember.memberImage = file?.path;
+    newMember.memberImage = file?.path.replace(/\\/g, "/");
 
     newMember.memberType = MemberType.RESTAURANT;
 
@@ -60,7 +60,7 @@ restaurantController.processSignup = async (
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(
-      `Hi, <script> alert(" ${message}"); window.replace("admin/signup)</script>`
+      `Hi, <script> alert(" ${message}"); window.replace("/admin/signup)</script>`
     );
   }
 };
@@ -83,7 +83,7 @@ restaurantController.processLogin = async (
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(
-      `Hi, <script> alert(" ${message}"); window.replace("admin/login)</script>`
+      `Hi, <script> alert(" ${message}"); window.replace("/admin/login)</script>`
     );
   }
 };

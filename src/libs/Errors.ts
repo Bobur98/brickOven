@@ -21,7 +21,7 @@ export enum Message {
   NOT_AUTHENTICATED = "You are not authenticated, please login first!",
   BLOCKED_USER = "You have been blocked, please contanct restaurent!",
   TOKEN_CREATION_FAILED = "Token creation error!",
-  IMAGE_REQUIRED = "Please upload your image!"
+  IMAGE_REQUIRED = "Please upload image!",
 }
 
 class Errors extends Error {

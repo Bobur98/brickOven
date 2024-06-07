@@ -1,6 +1,6 @@
 export enum ProductSize {
-  COUPLE = "COUPLE (14 INCH)",
-  PARTY = "PARTY (18 INCH) ",
+  COUPLE = "COUPLE",
+  PARTY = "PARTY",
   NORMAL = "NORMAL",
 }
 
@@ -17,7 +17,7 @@ export enum ProductStatus {
 }
 
 export enum ProductCollection {
-  DISH = "PASTA",
+  PASTA = "PASTA",
   SALAD = "SALAD",
   APPETIZERS = "APPETIZERS",
   DRINK = "DRINK",
