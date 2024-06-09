@@ -16,7 +16,7 @@ const store = new mongoDBStore({
 
 /** ENTRANCE **/
 const app = express();
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public"))); // IT IS OPEN FOR CLIENT 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan(`:method :url :response-time [:status] \n`));

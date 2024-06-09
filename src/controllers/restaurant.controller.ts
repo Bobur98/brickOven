@@ -60,7 +60,7 @@ restaurantController.processSignup = async (
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(
-      `Hi, <script> alert(" ${message}"); window.replace("/admin/signup)</script>`
+      `<script> alert(" ${message}"); window.location.replace("/admin/signup")</script>`
     );
   }
 };
@@ -83,7 +83,7 @@ restaurantController.processLogin = async (
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(
-      `Hi, <script> alert(" ${message}"); window.replace("/admin/login)</script>`
+      `<script> alert("${message}"); window.location.replace("/admin/login")</script>`
     );
   }
 };
@@ -122,7 +122,6 @@ restaurantController.updateChosenUser = async (req: Request, res: Response) => {
   }
 };
 
-
 restaurantController.checkAuthSession = async (
   req: AdminRequest,
   res: Response
@@ -152,7 +151,7 @@ restaurantController.verifyRestaurant = (
   } else {
     const message = Message.NOT_AUTHENTICATED;
     res.send(
-      `<script> alert("${message}"); window.location.replace('/admin/login');</script>`
+      `<script> alert("${message}"); window.location.replace('/admin/login')</script>`
     );
   }
 };
