@@ -39,6 +39,24 @@ $(function (){
             alert('Product update failed!')
         }
     })
+    $(".new-product-available-status").on("change", async function(e) {
+        const id = e.target.id;
+        const productAvailable = $(`#${id}.new-product-available-status`).val();
+
+        try {
+            const response = await axios.post(`/admin/product/${id}`, {productAvailable: productAvailable})
+            const result = response.data;
+
+            if(result.data) {
+                $(".new-product-available-status").blur();
+            }else {
+                alert("product update is failed!")
+            }
+        } catch (err) {
+            console.log("Error productStatus:", err);
+            alert('Product update failed!')
+        }
+    })
 
 
 })
