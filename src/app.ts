@@ -6,6 +6,9 @@ import morgan from "morgan";
 import session from "express-session";
 import ConnectMongoDBSession from "connect-mongodb-session";
 import { T } from "./libs/types/common";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import { MORGAN_FORMAT } from "./libs/config";
 
 const mongoDBStore = ConnectMongoDBSession(session);
 
@@ -16,10 +19,13 @@ const store = new mongoDBStore({
 
 /** ENTRANCE **/
 const app = express();
-app.use(express.static(path.join(__dirname, "public"))); // IT IS OPEN FOR CLIENT 
+app.use(express.static(path.join(__dirname, "public"))); // IT IS OPEN FOR CLIENT
+app.use("/uploads", express.static("./uploads"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan(`:method :url :response-time [:status] \n`));
+app.use(cookieParser());
+app.use(cors({ credentials: true, origin: true }));
+app.use(morgan(MORGAN_FORMAT));
 
 /** SESSIONS **/
 // to develop sessions first we need to install following packages: connect-mongodb-session and express-session with their types

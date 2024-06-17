@@ -42,31 +42,31 @@ class MemberService {
   }
 
   public async login(input: LoginInput): Promise<Member> {
-    // TODO consider member status later
     const member = await this.memberModel
       .findOne(
         {
           memberNick: input.memberNick,
+          memberStatus: { $ne: MemberStatus.DELETE },
         },
-        // agar bu argumentlarni pass qilmasak bizga memberni hama malumotini qaytaradi, bizga esa memberNick va MemberPassword kerag holos
-        {
-          memberNick: 1,
-          memberPassword: 1,
-        }
+        { memberNick: 1, memberPassword: 1, memberStatus: 1 }
       )
       .exec();
+
     if (!member) throw new Errors(HttpCode.NOT_FOUND, Message.NO_MEMBER_NICK);
+    else if (member.memberStatus === MemberStatus.BLOCK) {
+      throw new Errors(HttpCode.FORBIDDEN, Message.BLOCKED_USER);
+    }
 
     const isMatch = await bcrypt.compare(
       input.memberPassword,
       member.memberPassword
     );
-    //const isMatch = input.memberPassword === member.memberPassword;
 
-    if (!isMatch)
+    if (!isMatch) {
       throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
+    }
 
-    return await this.memberModel.findById(member._id).exec();
+    return await this.memberModel.findById(member._id).lean().exec();
   }
 
   public async addUserPoint(member: Member, point: number): Promise<Member> {
