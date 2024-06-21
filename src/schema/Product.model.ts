@@ -28,6 +28,10 @@ const productSchema = new Schema(
       type: Number,
       required: true,
     },
+    productIngridients: {
+      type: String,
+      required: true,
+    },
 
     productLeftCount: {
       type: Number,

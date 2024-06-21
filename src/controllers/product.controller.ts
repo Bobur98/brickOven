@@ -52,16 +52,49 @@ productController.getProduct = async (req: ExtendedRequest, res: Response) => {
   }
 };
 
+
 /** SSR */
 productController.getAllProducts = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req?.query.page as string) || 1;
+    const limit = parseInt(req?.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
     console.log("getAllProducts");
-    const data = await productService.getAllProducts();
+    const data = await productService.getAllProducts(skip, limit);
     console.log(data, "data");
 
-    res.render("products", { products: data });
+    res.render("products", {
+      products: data.result,
+      currentPage: page,
+      totalPages: data.totalPages,
+    });
   } catch (err) {
     console.log("Error on getAllProducts: ", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+productController.getProductsByAdmin = async (req: Request, res: Response) => {
+  try {
+    console.log("getProducts");
+    const { page, limit, order, productCollection, search } = req.query;
+    const inquiry: ProductInquiry = {
+      order: String(order),
+      page: Number(page),
+      limit: Number(limit),
+    };
+    if (productCollection)
+      inquiry.productCollection = productCollection as ProductCollection;
+
+    if (search) inquiry.search = String(search);
+
+    const result = await productService.getProducts(inquiry);
+
+    res.render("products", { products: result });
+  } catch (err) {
+    console.log("Error on getProducts: ", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
@@ -73,12 +106,11 @@ productController.createNewProduct = async (
 ) => {
   try {
     console.log("createNewProduct");
-    console.log(req.files);
-
     if (!req.files?.length)
       throw new Errors(HttpCode.INTERNAL_SERVER_ERROR, Message.CREATE_FAILED);
 
     const data: ProductInput = req.body;
+    console.log(data, "/*/*/*/*/*/*/*/*");
 
     data.productImages = req.files?.map((ele) => {
       return ele.path.replace(/\\/g, "/");
@@ -90,7 +122,7 @@ productController.createNewProduct = async (
       `<script>alert("Successful creation"); window.location.replace("/admin/product/all")</script>`
     );
   } catch (err) {
-    console.log("Error on getAllProducts: ", err);
+    console.log("Error on createNewProducts: ", err);
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(

@@ -66,6 +66,7 @@ function validateForm(){
     const productPrice = $(".product-price").val();
     const productLeftCount = $(".product-left-count").val();
     const productCollection = $(".product-collection").val();
+    const productIngridients = $(".product-ingr").val();
     const productDesc = $(".product-desc").val();
     const productStatus = $(".product-status").val();
  
@@ -75,7 +76,8 @@ function validateForm(){
         productLeftCount === "" ||
         productCollection === "" ||
         productDesc === "" ||
-        productStatus === ""
+        productStatus === "" ||
+        productIngridients === "" 
     ){
      alert("Please insert all required inputs");
      return false
@@ -103,3 +105,37 @@ function validateForm(){
         }
     }
  }
+
+
+
+ /**************Filter***********/ 
+  $(document).ready(function() {
+      $('.btn-wrapper button').on('click', function() {
+        const category = $(this).data('category');
+        fetchData({ productCollection: category });
+      });
+
+      $('#searchInput').on('keyup', function(event) {
+        if (event.key === 'Enter') {
+          const query = $(this).val();
+          fetchData({ query });
+        }
+      });
+
+      function fetchData(params) {
+        const queryString = $.param(params);
+        console.log(queryString,'9999');
+        $.ajax({
+          url: `/admin/product/all/?${queryString}`,
+          method: 'GET',
+          success: function(data) {
+            return data
+          },
+          error: function(error) {
+            console.error('Error fetching data:', error);
+          }
+        });
+      }
+
+
+    });

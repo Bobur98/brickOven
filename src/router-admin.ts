@@ -28,6 +28,13 @@ routerAdmin.get(
   restaurantController.verifyRestaurant,
   productController.getAllProducts
 );
+routerAdmin.get(
+  "/product/all/",
+  restaurantController.verifyRestaurant,
+  productController.getProductsByAdmin
+);
+
+
 routerAdmin.post(
   "/product/create",
   restaurantController.verifyRestaurant,

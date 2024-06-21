@@ -10,7 +10,7 @@ import { HttpCode } from "../libs/Errors";
 import { Message } from "../libs/Errors";
 import { shapeIntoMongooseObjectId } from "../libs/config";
 import { T } from "../libs/types/common";
-import { ProductStatus } from "../libs/enums/product.enum";
+import { ProductCollection, ProductStatus } from "../libs/enums/product.enum";
 import { ViewInput } from "../libs/types/view";
 import { ViewGroup } from "../libs/enums/view.enum";
 import ViewService from "./View.service";
@@ -28,7 +28,7 @@ class ProductService {
   /** SPA **/
   public async getProducts(inquiry: ProductInquiry): Promise<Product[]> {
     // console.log(inquiry, 'product inquiry');
-   console.log(inquiry, "---------------------------");
+    console.log(inquiry, "---------------------------");
 
     const match: T = { productStatus: ProductStatus.PROCESS };
     if (inquiry.productCollection)
@@ -101,14 +101,38 @@ class ProductService {
     return result;
   }
   /** SSR **/
-  public async getAllProducts(): Promise<Product[]> {
-    const result = await this.productModel.find().exec();
-    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+  public async getAllProducts(skip: number, limit: number): Promise<any> {
+    // const result = await this.productModel.find().exec();
+    const result = await this.productModel
+      .find()
+      .skip(skip)
+      .limit(limit)
+      .exec();
+    const totalProducts = await this.productModel.countDocuments().exec();
+    const totalPages = Math.ceil(totalProducts / limit);
 
-    return result;
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    const data = {
+      result,
+      totalProducts,
+      totalPages,
+    };
+    return data;
   }
+  // public async getProductsByCategory(
+  //   productCategory: ProductCollection
+  // ): Promise<Product[]> {
+  //   const result = await this.productModel
+  //     .find({ productCollection: productCategory })
+  //     .exec();
+  //   if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+  //   return result;
+  // }
 
   public async createNewProduct(input: ProductInput): Promise<Product> {
+    console.log(input, "**************");
+
     try {
       console.log("1", input);
       return await this.productModel.create(input);

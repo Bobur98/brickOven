@@ -26,7 +26,31 @@
     </div>
 
     <div class="restaurant-menu-frame">
+
       <div class="board">
+        <div class="filter-section">
+          <div class="input-wrapper">
+            <label for="fname">Search: </label>
+            <input type="text" id="searchInput" placeholder="New Yorker"/>
+          </div>
+          <div class="btn-wrapper">
+            <div>
+        <button data-category="PIZZA">Pizza</button>
+      </div>
+      <div>
+        <button data-category="PASTA">Pasta</button>
+      </div>
+      <div>
+        <button data-category="SALAD">Salad</button>
+      </div>
+      <div>
+        <button data-category="APPETIZERS">Appetizers</button>
+      </div>
+      <div>
+        <button data-category="DRINK">Drinks</button>
+      </div>
+          </div>
+        </div>
         <div class="dishes-table">
           <span class="new-dish-txt" style="margin-bottom: 30px">
             RESTAURANT MENU
@@ -72,6 +96,18 @@
            
             <!--  LOOP PRODUCTS: END  -->
           </table>
+           <div class="pagination">
+            <% if (currentPage > 1) { %>
+              <a href="?page=<%= currentPage - 1 %>">&laquo; Previous</a>
+            <% } %>
+            <% for (let i = 1; i <= totalPages; i++) { %>
+              <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+            <% } %>
+            <% if (currentPage < totalPages) { %>
+              <a href="?page=<%= currentPage + 1 %>">Next &raquo;</a>
+            <% } %>
+          </div>
+
           <div
             class="long-input"
             style="align-items: flex-end; margin-bottom: 25px"
@@ -157,9 +193,14 @@
             </div>
           </div>
           <div class="long-input">
+            <label>Product Ingridients</label>
+            <textarea name="productIngridients" class="product-ingr"></textarea>
+          </div>
+          <div class="long-input">
             <label>Product Description</label>
             <textarea name="productDesc" class="product-desc"></textarea>
           </div>
+      
 
           <div class="img-frame">
             <label>Product Images</label>
@@ -226,8 +267,10 @@
             </button>
           </div>
         </form>
+
       </div>
     </div>
+   
   </div>
 
   <script type="text/javascript" src="/js/products.js"></script>

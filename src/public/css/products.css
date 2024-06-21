@@ -51,6 +51,45 @@
   flex-direction: column;
   align-items: center;
 }
+.products-container .restaurant-menu-frame .board .filter-section{
+  display: flex;
+  flex-direction: column;
+  margin: 50px 0;
+}
+
+.products-container .restaurant-menu-frame .board .input-wrapper {
+  display: flex;
+  justify-content: center;
+  color: #efefee;
+  gap: 15px
+}
+.products-container .restaurant-menu-frame .board .input-wrapper label {
+  font-size: 25px;
+}
+
+.products-container .restaurant-menu-frame .board .input-wrapper input{
+  width: 500px;
+}
+.products-container .restaurant-menu-frame .board .input-wrapper input::placeholder {
+  opacity: 0.5;
+  font-size: 18px;
+  padding-left: 15px;
+  align-items: center;
+  vertical-align: middle;
+}
+.products-container .restaurant-menu-frame .board .btn-wrapper {
+  display: flex;
+  margin-top: 30px;
+  justify-content: center;
+  gap: 15px;
+}
+.products-container .restaurant-menu-frame .board .btn-wrapper div button{
+  padding: 5px 15px;
+  font-size: 20px;
+  border-radius: 8px;
+  border: none;
+}
+
 
 .products-container .board .dishes-table {
   position: relative;
@@ -135,6 +174,11 @@
   font-size: 15px;
   line-height: 26px;
   color: #4f547b;
+}
+.products-container .long-input .product-ingr {
+
+  height: 70px;
+  
 }
 
 .products-container .half-input select {

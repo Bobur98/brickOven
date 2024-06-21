@@ -11,7 +11,7 @@ export interface Product {
   productCollection: ProductCollection;
   productName: string;
   productPrice: number;
-  // productLeftCount: number;
+  productIngridients: string;
   productSize: ProductSize;
   productVolume: number;
   productDesc?: string;
@@ -32,6 +32,7 @@ export interface ProductInquiry {
 export interface ProductInput {
   productStatus?: ProductStatus;
   productCollection: ProductCollection;
+  productIngridients: string;
   productName: string;
   productPrice: number;
   // productLeftCount?: number;
@@ -55,4 +56,5 @@ export interface ProductUpdateInput {
   productDesc?: string;
   productImages?: string[];
   productViews?: number;
+  productIngridients: string;
 }
