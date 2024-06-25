@@ -1,5 +1,66 @@
 
 $(function (){
+  
+    $("#searchButton").on("click", async function(e) {
+        e.preventDefault()
+        const searchValue = $('#searchInput').val().trim();
+        try {
+            const response = await axios.get(`/admin/product/all?search=${searchValue}&page=1&limit=10`)
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(response.data, 'text/html');
+
+            $('.table').html($(doc).find('.table').html());
+            $('#pagination').html($(doc).find('#pagination').html());
+        } catch (err) {
+            console.log("Error searchProduct:", err);
+        }
+    
+    });
+
+ const handleCategoryButtonClick = async (collection) => {
+    try {
+        const response = await axios.get(`/admin/product/all?productCollection=${collection}&page=1&limit=10`);
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(response.data, 'text/html');
+
+        $('.table').html($(doc).find('.table').html());
+        $('#pagination').html($(doc).find('#pagination').html());
+    } catch (error) {
+        console.log("Error searchProduct:", error);
+    }
+};
+
+// Event listeners for category buttons
+$("#pizza-btn").on("click", () => handleCategoryButtonClick('PIZZA'));
+$("#pasta-btn").on("click", () => handleCategoryButtonClick('PASTA'));
+$("#salad-btn").on("click", () => handleCategoryButtonClick('SALAD'));
+$("#appetizers-btn").on("click", () => handleCategoryButtonClick('APPETIZERS'));
+$("#drink-btn").on("click", () => handleCategoryButtonClick('DRINK'));
+
+    $(document).ready(function() {
+    async function loadPage(page) {
+        try {
+            const response = await axios.get(`/admin/product/all?page=${page}`); // Update this URL to match your server endpoint
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(response.data, 'text/html');
+
+            // Assuming response contains the HTML for #product-data and #pagination
+            $('.table').html($(doc).find('.table').html());
+            $('#pagination').html($(doc).find('#pagination').html());
+        } catch (error) {
+            console.error('Failed to load content.', error);
+        }
+    }
+
+    $(document).on('click', '.pagination a', async function(e) {
+        e.preventDefault()
+        const page = $(this).attr('href').split('page=')[1];
+        await loadPage(page);
+    });
+
+});
+
+   
     $(".product-collection").on("change", () => {
         const selectedValue = $(".product-collection").val();
         if(selectedValue === 'DRINK') {
@@ -59,7 +120,12 @@ $(function (){
     })
 
 
+
+
+
+
 })
+
 
 function validateForm(){
     const productName = $(".product-name").val();
@@ -89,7 +155,6 @@ function validateForm(){
 
  function previewFileHandler(input, order) {
     const imgClassName = input.className;
-    console.log("input:", input);
     const file = $(`.${imgClassName}`).get(0).files[0];
     const fileType = file['type'];
     const validImageType = ['image/jpg', 'image/jpeg', 'image/png'];
@@ -106,36 +171,3 @@ function validateForm(){
     }
  }
 
-
-
- /**************Filter***********/ 
-  $(document).ready(function() {
-      $('.btn-wrapper button').on('click', function() {
-        const category = $(this).data('category');
-        fetchData({ productCollection: category });
-      });
-
-      $('#searchInput').on('keyup', function(event) {
-        if (event.key === 'Enter') {
-          const query = $(this).val();
-          fetchData({ query });
-        }
-      });
-
-      function fetchData(params) {
-        const queryString = $.param(params);
-        console.log(queryString,'9999');
-        $.ajax({
-          url: `/admin/product/all/?${queryString}`,
-          method: 'GET',
-          success: function(data) {
-            return data
-          },
-          error: function(error) {
-            console.error('Error fetching data:', error);
-          }
-        });
-      }
-
-
-    });

@@ -41,7 +41,6 @@ class OrderService {
         orderDelivery: delivey,
         memberId: memberId,
       });
-      console.log("orderId: ", newOrder._id);
 
       // create order item
       const orderId = newOrder._id;
@@ -51,7 +50,6 @@ class OrderService {
       console.log("Error, model: createOrder: ", err);
       throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
     }
-    console.log("values: ", amount, delivey);
   }
 
   private async recordOrderItems(
@@ -67,7 +65,6 @@ class OrderService {
 
     //Promise.all Yuqoridagi promisedListdagi async map toliq yakunlanmaguncha javobni bermaydi
     const orderItemsState = await Promise.all(promisedList);
-    console.log("orderItemsState: ", orderItemsState);
   }
 
   public async getMyOrders(

@@ -2,9 +2,15 @@ import { NextFunction, Request, Response } from "express";
 
 import { T } from "../libs/types/common";
 import MemberService from "../models/Member.service";
-import { AdminRequest, LoginInput, MemberInput } from "../libs/types/member";
-import { MemberType } from "../libs/enums/member.enum";
+import {
+  AdminRequest,
+  LoginInput,
+  MemberInput,
+  MemberInquiry,
+} from "../libs/types/member";
+import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import Errors, { HttpCode, Message } from "../libs/Errors";
+import { ProductInquiryByAdmin } from "../libs/types/product";
 
 const memberService = new MemberService();
 const restaurantController: T = {};
@@ -100,10 +106,24 @@ restaurantController.logout = async (req: AdminRequest, res: Response) => {
 
 restaurantController.getUsers = async (req: Request, res: Response) => {
   try {
-    const result = await memberService.getUsers();
-    console.log(result);
+    const { page, limit, memberStatus, search } = req.query;
+    const inquiry: MemberInquiry = {
+      page: Number(page) || 1,
+      limit: Number(limit) || 10,
+    };
+    if (memberStatus) inquiry.memberStatus = memberStatus as MemberStatus;
 
-    res.render("users", { users: result });
+    if (search) inquiry.search = String(search);
+    console.log(search);
+
+    const result = await memberService.getUsers(inquiry);
+    console.log(result.result);
+
+    res.render("users", {
+      users: result.result,
+      currentPage: inquiry?.page,
+      totalPages: result?.totalPages,
+    });
   } catch (err) {
     console.log("Error on getUsers", err);
     res.redirect("/admin/login");

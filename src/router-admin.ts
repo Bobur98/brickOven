@@ -22,12 +22,12 @@ routerAdmin.get("/logout", restaurantController.logout);
 
 routerAdmin.get("/check-me", restaurantController.checkAuthSession);
 
-// /** Product**/
-routerAdmin.get(
-  "/product/all",
-  restaurantController.verifyRestaurant,
-  productController.getAllProducts
-);
+/** Product**/
+// routerAdmin.get(
+//   "/product/all",
+//   restaurantController.verifyRestaurant,
+//   productController.getAllProducts
+// );
 routerAdmin.get(
   "/product/all/",
   restaurantController.verifyRestaurant,

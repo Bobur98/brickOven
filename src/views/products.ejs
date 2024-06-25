@@ -10,7 +10,7 @@
           <a class="nav-link active" href="/admin/">Home</a>
         </li>
         <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link" href="/admin/product/all">Menu</a>
+          <a class="nav-link menu" href="/admin/product/all">Menu</a>
         </li>
         <li class="nav-item" style="cursor: pointer">
           <a class="nav-link" href="/admin/user/all">Users</a>
@@ -32,23 +32,24 @@
           <div class="input-wrapper">
             <label for="fname">Search: </label>
             <input type="text" id="searchInput" placeholder="New Yorker"/>
+            <button id="searchButton">SEARCH</button>
           </div>
-          <div class="btn-wrapper">
-            <div>
-        <button data-category="PIZZA">Pizza</button>
-      </div>
-      <div>
-        <button data-category="PASTA">Pasta</button>
-      </div>
-      <div>
-        <button data-category="SALAD">Salad</button>
-      </div>
-      <div>
-        <button data-category="APPETIZERS">Appetizers</button>
-      </div>
-      <div>
-        <button data-category="DRINK">Drinks</button>
-      </div>
+        <div class="btn-wrapper">
+          <div>
+            <button id="pizza-btn" data-category="PIZZA">Pizza</button>
+          </div>
+          <div>
+            <button id="pasta-btn" data-category="PASTA">Pasta</button>
+          </div>
+          <div>
+            <button id="salad-btn" data-category="SALAD">Salad</button>
+          </div>
+          <div>
+            <button id="appetizers-btn" data-category="APPETIZERS">Appetizers</button>
+          </div>
+          <div>
+            <button id="drink-btn" data-category="DRINK">Drinks</button>
+          </div>
           </div>
         </div>
         <div class="dishes-table">
@@ -68,15 +69,14 @@
               </tr>
             </thead>
             <!--  LOOP PRODUCTS: START  -->
-            <% products.map(function(value, key) {
+            <% products?.map(function(value, key) {
               %>
               <tbody style="background: white">
                 <td><%= key + 1 %></td>
-                <td> <%= value.productName %> </td>
+                <td> <a href="#" class="product-name-link" data-product-id="<%= value._id %>"><%= value.productName %></a> </td>
                 <td> <%= value.productCollection %> </td>
                 <td> <%= value.productCollection === "DRINK" ? value.productVolume : value.productSize %> </td>
                 <td> <%= value.productPrice %> </td>
-                <!-- <td> <%= value.productAvailable === true ? "Available" : "Sold out" %> </td> -->
                 <td>
                   <select class="spec-select new-product-available-status" id="<%= value._id %>">
                     <option value="true" <%= value.productAvailable === true ? 'selected' : ''  %> >Available</option>
@@ -96,18 +96,16 @@
            
             <!--  LOOP PRODUCTS: END  -->
           </table>
-           <div class="pagination">
-            <% if (currentPage > 1) { %>
+    
+          <div id="pagination" class="pagination"> 
+              <% if (currentPage > 1) { %> 
               <a href="?page=<%= currentPage - 1 %>">&laquo; Previous</a>
-            <% } %>
-            <% for (let i = 1; i <= totalPages; i++) { %>
-              <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
-            <% } %>
-            <% if (currentPage < totalPages) { %>
-              <a href="?page=<%= currentPage + 1 %>">Next &raquo;</a>
-            <% } %>
+              <% } %> <% for (let i = 1; i <= totalPages; i++) { %> 
+              <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a> 
+              <% } %> <% if (currentPage < totalPages) { %> 
+              <a href="?page=<%= currentPage + 1 %>">Next &raquo;</a> 
+              <% } %> 
           </div>
-
           <div
             class="long-input"
             style="align-items: flex-end; margin-bottom: 25px"
@@ -267,7 +265,6 @@
             </button>
           </div>
         </form>
-
       </div>
     </div>
    

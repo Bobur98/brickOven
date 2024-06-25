@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: linear-gradient(-45deg, #110303bf, #e37813, #011c1aba, #968383);
+ background: linear-gradient(-45deg, #4e4376, #2b5876, #1e6762);
 }
 
 .products-container a {
@@ -15,8 +15,12 @@
 }
 
 .products-container .nav-item a {
-  color: #e3c08d;
+  color: #6eb2f5;
 }
+.products-container .nav-item .menu {
+  color: #0a81f8;
+}
+
 
 .products-container .nav-item a.disabled {
   color: #898071;
@@ -40,6 +44,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.products-container .restaurant-menu-frame .pagination a {
+      padding: 8px 16px;
+      text-decoration: none;
+      color: black;
+      background-color: white;
+      border: 1px solid #ddd;
+      margin: 0 4px;
+}
+.products-container .restaurant-menu-frame .pagination a.active {
+  background-color: rgb(6, 67, 95);
+  color: white;
+}
+.products-container .restaurant-menu-frame .pagination  a:hover:not(.active) {
+  background-color: #ddd;
+
 }
 
 .products-container .restaurant-menu-frame .board {
@@ -69,13 +89,20 @@
 
 .products-container .restaurant-menu-frame .board .input-wrapper input{
   width: 500px;
+  padding-left: 15px;
 }
 .products-container .restaurant-menu-frame .board .input-wrapper input::placeholder {
   opacity: 0.5;
   font-size: 18px;
-  padding-left: 15px;
+  /* padding-left: 15px; */
   align-items: center;
   vertical-align: middle;
+}
+.products-container .restaurant-menu-frame .board .input-wrapper button {
+  background-color: #6eb2f5;
+  border: none;
+  color: #fff;
+  font-weight: 700;
 }
 .products-container .restaurant-menu-frame .board .btn-wrapper {
   display: flex;
@@ -88,6 +115,9 @@
   font-size: 20px;
   border-radius: 8px;
   border: none;
+  background-color: #6eb2f5;
+  color: #fff;
+
 }
 
 

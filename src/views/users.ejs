@@ -33,7 +33,7 @@
           <a class="nav-link" href="/admin/product/all">Menu</a>
         </li>
         <li class="nav-item" style="cursor: pointer">
-          <a class="nav-link" href="/admin/user/all">Users</a>
+          <a class="nav-link user" href="/admin/user/all">Users</a>
         </li>
         <li
           class="nav-item"
@@ -46,12 +46,28 @@
     </div>
 
     <div class="users-frame">
+
       <div class="board">
         <div class="user-table">
           <span class="header-name" style="margin-bottom: 30px"
             >All Users List</span
           >
-          <table class="table table-hover table-sm">
+          <div class="filter-wrapper">
+            <div class="input-wrapper">
+              <label for="fname">Search: </label>
+              <input type="text" id="searchInput" placeholder="New Yorker"/>
+              <button id="searchButton">SEARCH</button>
+            </div>
+            <div class="dropdown" action="">
+              <select name="language" id="language">
+                <option value="" selected>All</option>
+                <option value="ACTIVE" >Active</option>
+                <option value="BLOCK">Blocked</option>
+                <option value="DELETE">Deleted</option>
+              </select>
+            </div>
+          </div>
+            <table class="table table-hover table-sm">
             <thead class="thead-light">
               <tr class="thead-light">
                 <th scope="col">No</th>
@@ -75,8 +91,18 @@
               </tbody>  
               <% }) %>            
           </table>
+           <div id="pagination" class="pagination"> 
+              <% if (currentPage > 1) { %> 
+              <a href="?page=<%= currentPage - 1 %>">&laquo; Previous</a>
+              <% } %> <% for (let i = 1; i <= totalPages; i++) { %> 
+              <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i%></a> 
+              <% } %> <% if (currentPage < totalPages) { %> 
+              <a href="?page=<%= currentPage + 1 %>">Next &raquo;</a> 
+              <% } %> 
+           </div>
         </div>
       </div>
+
     </div>
     <% } %>
   </div>

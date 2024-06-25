@@ -3,6 +3,7 @@ import {
   LoginInput,
   Member,
   MemberInput,
+  MemberInquiry,
   MemberUpdateInput,
 } from "../libs/types/member";
 import Errors, { Message } from "../libs/Errors";
@@ -173,13 +174,66 @@ class MemberService {
     return await this.memberModel.findById(member._id).exec();
   }
 
-  public async getUsers(): Promise<Member[]> {
-    const result = await this.memberModel
-      .find({ memberType: MemberType.USER })
-      .exec();
-    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+  public async getUsers(inquiry: MemberInquiry): Promise<any> {
+    const pipeline: any[] = [];
 
-    return result;
+    // Match stage to filter by productCollection if provided
+    if (inquiry.memberStatus) {
+      pipeline.push({
+        $match: { memberStatus: inquiry.memberStatus },
+      });
+    }
+
+    // Match stage to search by productName if search query provided
+    if (inquiry.search) {
+      pipeline.push({
+        $match: { memberNick: { $regex: new RegExp(inquiry.search, "i") } },
+      });
+    }
+
+    // Pagination stages
+    pipeline.push(
+      { $skip: (inquiry.page - 1) * inquiry.limit },
+      { $limit: inquiry.limit }
+    );
+
+    // Pipeline for counting total documents without pagination
+    const countPipeline: any[] = [];
+
+    if (inquiry.memberStatus) {
+      countPipeline.push({
+        $match: { memberStatus: inquiry.memberStatus },
+      });
+    }
+
+    if (inquiry.search) {
+      countPipeline.push({
+        $match: { productName: { $regex: new RegExp(inquiry.search, "i") } },
+      });
+    }
+
+    countPipeline.push({ $count: "totalMembers" });
+
+    const [result, countResult] = await Promise.all([
+      this.memberModel.aggregate(pipeline).exec(),
+      this.memberModel.aggregate(countPipeline).exec(),
+    ]);
+
+    const totalProducts =
+      countResult.length > 0 ? countResult[0].totalProducts : 0;
+    const totalPages = Math.ceil(totalProducts / inquiry.limit);
+
+    if (!result) {
+      throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    }
+
+    const data = {
+      result,
+      totalProducts,
+      totalPages,
+    };
+
+    return data;
   }
   public async updateChosenUser(input: MemberUpdateInput): Promise<Member> {
     const memberId = shapeIntoMongooseObjectId(input._id);

@@ -28,6 +28,12 @@ export interface ProductInquiry {
   productCollection?: ProductCollection;
   search?: string;
 }
+export interface ProductInquiryByAdmin {
+  page: number;
+  limit: number;
+  productCollection?: ProductCollection;
+  search?: string;
+}
 
 export interface ProductInput {
   productStatus?: ProductStatus;

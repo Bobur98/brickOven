@@ -1,6 +1,7 @@
 import {
   ProductInput,
   ProductInquiry,
+  ProductInquiryByAdmin,
   ProductUpdateInput,
 } from "../libs/types/product";
 import ProductModel from "../schema/Product.model";
@@ -27,9 +28,6 @@ class ProductService {
 
   /** SPA **/
   public async getProducts(inquiry: ProductInquiry): Promise<Product[]> {
-    // console.log(inquiry, 'product inquiry');
-    console.log(inquiry, "---------------------------");
-
     const match: T = { productStatus: ProductStatus.PROCESS };
     if (inquiry.productCollection)
       match.productCollection = inquiry.productCollection;
@@ -37,6 +35,7 @@ class ProductService {
     if (inquiry.search) {
       match.productName = { $regex: new RegExp(inquiry.search, "i") };
     }
+
     const sort: T =
       inquiry.order === "productPrice"
         ? { [inquiry.order]: 1 }
@@ -62,8 +61,6 @@ class ProductService {
   ): Promise<Product> {
     const productId = shapeIntoMongooseObjectId(id);
 
-    console.log(productId, "PRODUCT ID");
-
     let result = await this.productModel
       .findOne({
         _id: productId,
@@ -81,7 +78,6 @@ class ProductService {
       };
       const existView = await this.viewService.checkViewExistance(input);
       // Insert New Log
-      console.log("exist:", !!existView);
 
       if (!existView) {
         console.log("PLANNING TO INSERT NEW VIEW");
@@ -101,22 +97,76 @@ class ProductService {
     return result;
   }
   /** SSR **/
-  public async getAllProducts(skip: number, limit: number): Promise<any> {
-    // const result = await this.productModel.find().exec();
-    const result = await this.productModel
-      .find()
-      .skip(skip)
-      .limit(limit)
-      .exec();
-    const totalProducts = await this.productModel.countDocuments().exec();
-    const totalPages = Math.ceil(totalProducts / limit);
+  // public async getAllProducts(): Promise<any> {
+  //   // string => ObjectId
 
-    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+  //   const result = await this.productModel.find().exec();
+  //   if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+  //   return result;
+  // }
+
+  public async getProductsByAdmin(
+    inquiry: ProductInquiryByAdmin
+  ): Promise<any> {
+    const pipeline: any[] = [];
+
+    // Match stage to filter by productCollection if provided
+    if (inquiry.productCollection) {
+      pipeline.push({
+        $match: { productCollection: inquiry.productCollection },
+      });
+    }
+
+    // Match stage to search by productName if search query provided
+    if (inquiry.search) {
+      pipeline.push({
+        $match: { productName: { $regex: new RegExp(inquiry.search, "i") } },
+      });
+    }
+
+    // Pagination stages
+    pipeline.push(
+      { $skip: (inquiry.page - 1) * inquiry.limit },
+      { $limit: inquiry.limit }
+    );
+
+    // Pipeline for counting total documents without pagination
+    const countPipeline: any[] = [];
+
+    if (inquiry.productCollection) {
+      countPipeline.push({
+        $match: { productCollection: inquiry.productCollection },
+      });
+    }
+
+    if (inquiry.search) {
+      countPipeline.push({
+        $match: { productName: { $regex: new RegExp(inquiry.search, "i") } },
+      });
+    }
+
+    countPipeline.push({ $count: "totalProducts" });
+
+    const [result, countResult] = await Promise.all([
+      this.productModel.aggregate(pipeline).exec(),
+      this.productModel.aggregate(countPipeline).exec(),
+    ]);
+
+    const totalProducts =
+      countResult.length > 0 ? countResult[0].totalProducts : 0;
+    const totalPages = Math.ceil(totalProducts / inquiry.limit);
+
+    if (!result) {
+      throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+    }
+
     const data = {
       result,
       totalProducts,
       totalPages,
     };
+
     return data;
   }
   // public async getProductsByCategory(
@@ -131,14 +181,9 @@ class ProductService {
   // }
 
   public async createNewProduct(input: ProductInput): Promise<Product> {
-    console.log(input, "**************");
-
     try {
-      console.log("1", input);
       return await this.productModel.create(input);
     } catch (err) {
-      console.log("2");
-
       throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
     }
   }
@@ -155,7 +200,6 @@ class ProductService {
       .exec();
     if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.UPDATE_FAILED);
 
-    console.log(result, "result");
     return result;
   }
 }

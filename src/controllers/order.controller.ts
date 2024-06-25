@@ -33,7 +33,6 @@ orderController.getMyOrder = async (req: ExtendedRequest, res: Response) => {
       limit: Number(limit),
       orderStatus: orderStatus as OrderStatus,
     };
-    console.log("req.query: ", inquiry);
     const result = await orderService.getMyOrders(req.member, inquiry);
     console.log(result);
 
@@ -53,7 +52,6 @@ orderController.updateOrder = async (req: ExtendedRequest, res: Response) => {
     console.log("updateOrder");
     const input: OrderUpdateInput = req.body;
     const result = await orderService.updateOrder(req.member, input);
-    console.log(input, "input");
 
     res.status(HttpCode.CREATED).json(result);
   } catch (err) {
