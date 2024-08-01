@@ -20,3 +20,15 @@ mongoose
   })
   .catch((err) => console.log("Error on connection MongoDB", err));
   
+
+  /**
+   * PM2 COMMANDS
+   * pm2 ls
+   * pm2 start dist/server.js --name=BRICKOVEN
+   * pm2 start "npm run start:prod" --name=BRICKOVEN
+   * pm2 stop id
+   * pm2 delete id
+   * pm2 restart id
+   * pm2 monit
+   * pm2 kill
+   */

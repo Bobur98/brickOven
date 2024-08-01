@@ -1,4 +1,3 @@
-import MemberModel from "../schema/Member.model";
 import {
   LoginInput,
   Member,
@@ -11,6 +10,8 @@ import { HttpCode } from "../libs/Errors";
 import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import * as bcrypt from "bcryptjs";
 import { shapeIntoMongooseObjectId } from "../libs/config";
+import MemberModel from "../schema/Member.model";
+
 class MemberService {
   private readonly memberModel;
   constructor() {

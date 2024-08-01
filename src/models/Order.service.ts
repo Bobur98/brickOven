@@ -10,7 +10,6 @@ import Errors, { Message } from "../libs/Errors";
 import { HttpCode } from "../libs/Errors";
 import { ObjectId } from "mongoose";
 import { OrderStatus } from "../libs/enums/order.enum";
-import MemberModel from "../schema/Member.model";
 import MemberService from "./Member.service";
 import OrderModel from "../schema/Order.model";
 import OrderItemModel from "../schema/OrderItem.model";
