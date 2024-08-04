@@ -12,7 +12,6 @@ $(function (){
             $('.table').html($(doc).find('.table').html());
             $('#pagination').html($(doc).find('#pagination').html());
         } catch (err) {
-            console.log("Error searchProduct:", err);
         }
     
     });
@@ -26,7 +25,6 @@ $(function (){
         $('.table').html($(doc).find('.table').html());
         $('#pagination').html($(doc).find('#pagination').html());
     } catch (error) {
-        console.log("Error searchProduct:", error);
     }
 };
 
@@ -96,7 +94,6 @@ $("#drink-btn").on("click", () => handleCategoryButtonClick('DRINK'));
                 alert("product update is failed!")
             }
         } catch (err) {
-            console.log("Error productStatus:", err);
             alert('Product update failed!')
         }
     })
@@ -114,7 +111,6 @@ $("#drink-btn").on("click", () => handleCategoryButtonClick('DRINK'));
                 alert("product update is failed!")
             }
         } catch (err) {
-            console.log("Error productStatus:", err);
             alert('Product update failed!')
         }
     })

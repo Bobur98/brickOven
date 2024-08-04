@@ -19,12 +19,10 @@ const authService = new AuthService();
 
 memberController.getRestaurant = async (req: Request, res: Response) => {
   try {
-    console.log("getRestaurent");
     const result = await memberService.getRestaurant();
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {
-    console.log("Error on getRestaurent: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -48,7 +46,6 @@ memberController.signup = async (req: Request, res: Response) => {
 
     res.status(HttpCode.CREATED).json({ member: result, accessToken: token });
   } catch (err) {
-    console.log("Error on signup: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -60,7 +57,6 @@ memberController.signup = async (req: Request, res: Response) => {
 
 memberController.login = async (req: Request, res: Response) => {
   try {
-    console.log("login");
 
     const input: LoginInput = req.body;
 
@@ -75,7 +71,6 @@ memberController.login = async (req: Request, res: Response) => {
 
     res.status(HttpCode.OK).json({ member: result, accessToken: token });
   } catch (err) {
-    console.log("Error on login: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -86,11 +81,9 @@ memberController.login = async (req: Request, res: Response) => {
 
 memberController.logout = async (req: ExtendedRequest, res: Response) => {
   try {
-    console.log("logout");
     res.cookie("accessToken", null, { maxAge: 0, httpOnly: true });
     res.status(HttpCode.OK).json({ logout: true });
   } catch (err) {
-    console.log("Error on logout: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -104,12 +97,10 @@ memberController.getMemberDetail = async (
   res: Response
 ) => {
   try {
-    console.log("getMemberDetail");
     const result = await memberService.getMemberDetail(req.member);
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {
-    console.log("Error on getMemberDetail: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -120,7 +111,6 @@ memberController.getMemberDetail = async (
 
 memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
   try {
-    console.log("updateMemberDetail");
     const input: MemberUpdateInput = req.body;
 
     if (req.file) input.memberImage = req.file.path.replace(/\\/, "/");
@@ -128,7 +118,6 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {
-    console.log("Error on updateMemberDetail: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -139,13 +128,11 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
 
 memberController.getTopUsers = async (req: Request, res: Response) => {
   try {
-    console.log("getTopUsers");
 
     const result = await memberService.getTopUsers();
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {
-    console.log("Error on getTopUsers: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -171,7 +158,6 @@ memberController.verifyAuth = async (
 
     next();
   } catch (err) {
-    console.log("Error on verifyauth:", err);
 
     if (err instanceof Errors) {
       res.status(err.code).json(err);
@@ -195,7 +181,6 @@ memberController.retrieveAuth = async (
 
     next();
   } catch (err) {
-    console.log("Error on retrieveAuth:", err);
     next();
   }
 };

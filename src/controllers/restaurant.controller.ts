@@ -19,7 +19,6 @@ restaurantController.goHome = async (req: Request, res: Response) => {
   try {
     res.render("home");
   } catch (err) {
-    console.log("Error, goHome:", err);
     res.redirect("/admin");
   }
 };
@@ -28,7 +27,6 @@ restaurantController.getSignup = async (req: Request, res: Response) => {
   try {
     res.render("signup");
   } catch (err) {
-    console.log("Error on signup", err);
     res.redirect("/admin");
   }
 };
@@ -37,7 +35,6 @@ restaurantController.getLogin = async (req: Request, res: Response) => {
   try {
     res.render("login");
   } catch (err) {
-    console.log("Error on getLogin", err);
   }
 };
 
@@ -62,7 +59,6 @@ restaurantController.processSignup = async (
       res.redirect("/admin/product/all");
     });
   } catch (err) {
-    console.log("Error on processSignup", err);
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(
@@ -85,7 +81,6 @@ restaurantController.processLogin = async (
       res.redirect("/admin/product/all");
     });
   } catch (err) {
-    console.log("Error on processLogin", err);
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(
@@ -99,7 +94,6 @@ restaurantController.logout = async (req: AdminRequest, res: Response) => {
       res.redirect("/admin");
     });
   } catch (err) {
-    console.log("Error on processLogin", err);
     res.redirect("/admin");
   }
 };
@@ -114,10 +108,8 @@ restaurantController.getUsers = async (req: Request, res: Response) => {
     if (memberStatus) inquiry.memberStatus = memberStatus as MemberStatus;
 
     if (search) inquiry.search = String(search);
-    console.log(search);
 
     const result = await memberService.getUsers(inquiry);
-    console.log(result.result);
 
     res.render("users", {
       users: result.result,
@@ -125,7 +117,6 @@ restaurantController.getUsers = async (req: Request, res: Response) => {
       totalPages: result?.totalPages,
     });
   } catch (err) {
-    console.log("Error on getUsers", err);
     res.redirect("/admin/login");
   }
 };
@@ -136,7 +127,6 @@ restaurantController.updateChosenUser = async (req: Request, res: Response) => {
 
     res.status(HttpCode.OK).json({ data: result });
   } catch (err) {
-    console.log("Error on updateChosenUser", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard.message);
   }
@@ -155,7 +145,6 @@ restaurantController.checkAuthSession = async (
       res.send(`<script> alert("${Message.NOT_AUTHENTICATED}")</script>`);
     }
   } catch (err) {
-    console.log("Error on processLogin", err);
     res.send(err);
   }
 };

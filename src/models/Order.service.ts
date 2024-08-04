@@ -46,7 +46,6 @@ class OrderService {
       await this.recordOrderItems(orderId, input);
       return newOrder;
     } catch (err) {
-      console.log("Error, model: createOrder: ", err);
       throw new Errors(HttpCode.BAD_REQUEST, Message.CREATE_FAILED);
     }
   }

@@ -11,11 +11,9 @@ const orderController: T = {};
 
 orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
   try {
-    console.log("createOrder");
     const result = await orderService.createOrder(req.member, req.body);
     res.status(HttpCode.CREATED).json(result);
   } catch (err) {
-    console.log("Error on createOrder: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -26,7 +24,6 @@ orderController.createOrder = async (req: ExtendedRequest, res: Response) => {
 
 orderController.getMyOrder = async (req: ExtendedRequest, res: Response) => {
   try {
-    console.log("getMyOrders");
     const { page, limit, orderStatus } = req.query;
     const inquiry: OrderInquiry = {
       page: Number(page),
@@ -34,11 +31,9 @@ orderController.getMyOrder = async (req: ExtendedRequest, res: Response) => {
       orderStatus: orderStatus as OrderStatus,
     };
     const result = await orderService.getMyOrders(req.member, inquiry);
-    console.log(result);
 
     res.status(HttpCode.CREATED).json(result);
   } catch (err) {
-    console.log("Error on getMyOrders: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {
@@ -49,13 +44,11 @@ orderController.getMyOrder = async (req: ExtendedRequest, res: Response) => {
 
 orderController.updateOrder = async (req: ExtendedRequest, res: Response) => {
   try {
-    console.log("updateOrder");
     const input: OrderUpdateInput = req.body;
     const result = await orderService.updateOrder(req.member, input);
 
     res.status(HttpCode.CREATED).json(result);
   } catch (err) {
-    console.log("Error on updateOrder: ", err);
     if (err instanceof Errors) {
       res.status(err.code).json(err);
     } else {

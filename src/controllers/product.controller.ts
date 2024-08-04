@@ -17,7 +17,6 @@ const productController: T = {};
 
 productController.getProducts = async (req: Request, res: Response) => {
   try {
-    console.log("getProducts");
     const { page, limit, order, productCollection, search } = req.query;
     const inquiry: ProductInquiry = {
       order: String(order),
@@ -33,7 +32,6 @@ productController.getProducts = async (req: Request, res: Response) => {
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {
-    console.log("Error on getProducts: ", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
@@ -41,7 +39,6 @@ productController.getProducts = async (req: Request, res: Response) => {
 
 productController.getProduct = async (req: ExtendedRequest, res: Response) => {
   try {
-    console.log("getProduct");
     const { id } = req.params;
 
     const memberId = req.member?._id ?? null;
@@ -49,7 +46,6 @@ productController.getProduct = async (req: ExtendedRequest, res: Response) => {
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {
-    console.log("Error on getProduct: ", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
@@ -72,7 +68,6 @@ productController.getProduct = async (req: ExtendedRequest, res: Response) => {
 
 productController.getProductsByAdmin = async (req: Request, res: Response) => {
   try {
-    console.log("getProductsByAdmin");
     const { page, limit, productCollection, search } = req.query;
     const inquiry: ProductInquiryByAdmin = {
       page: Number(page) || 1,
@@ -91,7 +86,6 @@ productController.getProductsByAdmin = async (req: Request, res: Response) => {
       totalPages: data?.totalPages,
     });
   } catch (err) {
-    console.log("Error on getProductsByAdmin: ", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
@@ -102,7 +96,6 @@ productController.createNewProduct = async (
   res: Response
 ) => {
   try {
-    console.log("createNewProduct");
     if (!req.files?.length)
       throw new Errors(HttpCode.INTERNAL_SERVER_ERROR, Message.CREATE_FAILED);
 
@@ -118,7 +111,6 @@ productController.createNewProduct = async (
       `<script>alert("Successful creation"); window.location.replace("/admin/product/all")</script>`
     );
   } catch (err) {
-    console.log("Error on createNewProducts: ", err);
     const message =
       err instanceof Errors ? err.message : Message.SOMETHING_WENT_WRONG;
     res.send(
@@ -129,14 +121,12 @@ productController.createNewProduct = async (
 
 productController.updateChosenProduct = async (req: Request, res: Response) => {
   try {
-    console.log("updateChosenProduct");
     const id = req.params.id;
 
     const result = await productService.updateChosenProduct(id, req.body);
 
     res.status(HttpCode.OK).json({ data: result });
   } catch (err) {
-    console.log("Error on getAllProducts: ", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }

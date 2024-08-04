@@ -80,7 +80,7 @@ class ProductService {
       // Insert New Log
 
       if (!existView) {
-        console.log("PLANNING TO INSERT NEW VIEW");
+        // INSERT NEW VIEW
         await this.viewService.insertMemberView(input);
       }
 

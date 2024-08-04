@@ -39,7 +39,6 @@ $(function () {
     $("#language").on("change", async function(e) {
         e.preventDefault()
         let selectedValue = $(this).val();
-        console.log('Selected value:', selectedValue);
         try {
             const response = await axios.get(`/admin/user/all?memberStatus=${selectedValue}&page=1&limit=10`);
             const parser = new DOMParser();
